@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>What Is Devops - 2014/12/04 @ ThoughtWorks Xi'An - Laurence J MacGuire</title>
+		<title>Structured Logging - 2015/01/28 @ ThoughtWorks Xi'An - Laurence J MacGuire</title>
 
 		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
 		<meta name="author" content="Hakim El Hattab">
@@ -43,10 +43,10 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section>
-					<h1>What Is DevOps?</h1>
-					<h3>It's not all about tools.</h3>
+					<h1>Structured Logging</h1>
+					<h3>A Working Example</h3>
 					<p>
-						<small>Created by <a href="http://github.com/leprechaun/">Laurence J MacGuire a.k.a Liu Jian Ming</a></small>
+						<small>Created by <a href="http://github.com/leprechaun/">Laurence J MacGuire a.k.a Liu Jian Ming aka 刘建明</a></small>
 					</p>
 					<p>
 						<small>Thought<span style="font-weight: bold; color: white;">Works</span> Xi'An, 2014/12/04</small>
@@ -56,7 +56,6 @@
 				</section>
 
 				<section>
-					<section id="fragments">
 						<h2>The 5 "W's"</h2>
 						<ul>
 							<li>Who?</li>
@@ -66,665 +65,327 @@
 							<li>Why?</li>
 							<li>... and How?</li>
 						</ul>
-					</section>
-				</section>
-
-
-				<section>
-					<section>
-						<h2>Waterfall Project Management</h2>
-					</section>
 				</section>
 
 				<section>
-					<section>
-						<h2>It makes perfect sense</h2>
-						<img src="images/waterfall.jpg"/>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>The Client</h2>
-						<img src="images/making-money.jpg"/>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>Marketing</h2>
-						<img src="images/daffy-idea.jpg"/>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>BA/PM</h2>
-						<img src="images/specs-2.jpg"/>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>The Programmers</h2>
-						<img src="images/1000-monkeys.png"/>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>And then the QAs</h2>
-						<img src="images/self-destruct-typing.gif"/>
-					</section>
-				</section>
-
-
-				<section>
-					<section>
-						<h2>Meanwhile, as a PM/Marketing</h2>
-						<img src="images/op-will-surely-deliver.jpg"/>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>As a Client</h2>
-						<img src="images/blurst-of-times.jpg"/>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>Agile Project Management</h2>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>The Same Roles</h2>
-						<p>The Client</p>
-						<p>Marketing | BA | Programmer | QA</p>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>和谐 / 合作</h2>
-						<img src="images/harmonious.jpg"/>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>Positive Changes</h2>
+						<h2>What are logs?</h2>
 						<ul>
-							<li>Unit testing</li>
-							<li>Behaviour testing</li>
-							<li>Integration testing</li>
+							<li>Debugging</li>
+							<li>Auditing</li>
+							<li>Profiling</li>
 						</ul>
-					</section>
 				</section>
 
 				<section>
-					<section>
-						<h2>Tada!</h2>
-						<h1>Continuous Integration</h1>
-					</section>
+						<h2>Distributed logging</h2>
+						<ul>
+							<li>Horizontal vs Vertical scaling</li>
+						</ul>
+						<pre><code>ssh user@system-01.xyz.com && tail -f /var/log/my-application.log
+ssh user@system-02.xyz.com && tail -f /var/log/my-application.log
+ssh user@system-XX.xyz.com && tail -f /var/log/my-application.log</code></pre>
+						<blockquote>NOPE! NOPE! NOPE!</blockquote>
 				</section>
 
 				<section>
-					<section>
-						<h2>Oh, wait</h2>
-						<p>Code that only lives in Git is dead.</p>
-						<p>And where's the Ops guys?</p>
-					</section>
+						<h2>Centralised Access</h2>
+						<blockquote>Distribution requires adequate centralisation</blockquote>
+						<ul>
+							<li>rsyslog</li>
+							<li>graylog</li>
+							<li>lumberjack</li>
+							<li>sftp/s3/whatever</li>
+						</ul>
 				</section>
 
 				<section>
-					<section>
-						<h2>Developers</h2>
-						<p>Responsibilities</p>
-						<ul>
-							<li>Write code</li>
-							<li>Fix bugs</li>
-							<li>Test things</li>
-						</ul>
-					</section>
-					<section>
-						<h2>Developers</h2>
-						<p>Requirements</p>
-						<ul>
-							<li>Tools (Editors, IDEs, Debuggers, etc)</li>
-							<li>The Internet (LOL, HuaWei)</li>
-							<li>Clear direction from 'Business Roles'</li>
-							<li>An Ops team to run their software</li>
-						</ul>
-					</section>
-					<section>
-						<h2>Developers</h2>
-						<p>Wants</p>
-						<ul>
-							<li>Build cool stuff</li>
-							<li>Use cutting/bleeding edge tools</li>
-							<li>And ship fast, move on to the next cool thing</li>
-							<li>No bugs</li>
-						</ul>
-					</section>
+						<h2>File based logs</h2>
+
+						<pre><code>127.0.0.1 - - [01/Feb/2015:12:41:18 +0800] "GET /optout_check?callback=Krux.ns._default.kxjsonp_optOutCheck HTTP/1.1" 404 506 "http://www.theguardian.com/us-news/2015/jan    /31/detroit-aiyana-stanley-jones-police-officer-cleared" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/39.0.2171.65 Chrome/39.0.    2171.65 Safari/537.36"</code></pre>
+						<pre><code>$&gt; cat access.log | awk '{print $1}' | sort -n | uniq -c | sort -nr
+  29877 93.xxx.xxx.xxx
+  17538 80.xxx.xxx.xxx
+   5895 198.xxx.xxx.xxx
+   3042 37.xxx.xxx.xxx
+   2956 208.xxx.xxx.xxx
+   2613 94.xxx.xxx.xxx
+   ...</code></pre>
+						<blockquote>Cool! But not accessible.</blockquote>
 				</section>
 
 				<section>
-					<section>
-						<h2>Operations</h2>
-						<p>"SysAdmins" &amp; "NetAdmins"</p>
-						<p>REA's Operations people</p>
-						<ul>
-							<li>Jesse (American guy, Networking)</li>
-							<li>Javier (General infrastructure)</li>
-							<li>Wigs (Security)</li>
-						</ul>
-					</section>
-					<section>
-						<h2>Operation</h2>
-						<p>Network Admins</p>
-						<img src="images/server-rack.jpg" style="width: 600px;">
-					</section>
-					<section>
-						<h2>Operations</h2>
-						<p>Systems Admins</p>
-						<img src="images/server-rack-servers.jpg" style="width: 600px;">
-					</section>
-					<section>
-						<h2>Operations</h2>
-						<p>Security</p>
-						<img src="images/the-matrix.jpg" style="width: 600px;">
-					</section>
-					<section>
-						<h2>Stuff they do</h2>
-						<ul>
-							<li>Setup active directory</li>
-							<li>Install and repair servers</li>
-							<li>Install and maintain network equipment (800+ users)</li>
-							<li>Plan for huge networks</li>
-							<li>Install phone systems</li>
-							<li>Know Linux/Windows/Cisco IOS by heart</li>
-							<li>(All that command-line magic!)</li>
-							<li>Shutdown and restarted *ALL* of EQX Saturday</li>
-							<li>Last line of defense for any IT related issue</li>
-						</ul>
-					</section>
-					<section>
-						<h2>Also</h2>
-						<img src="images/beer.jpg" style="width: 600px;">
-					</section>
+						<h2>It still fails</h2>
+						<h3>Some formats are really hard to parse</h3>
+						<pre><code>
+Started GET "/meta/processed_dates.json" for 127.0.0.1 at 2015-01-25 18:24:49 +0800
+Processing by Meta::ProcessedDatesController#all as JSON
+  Rendered text template (0.0ms)
+Completed 404 Not Found in 8.4ms (Views: 4.9ms | ActiveRecord: 0.5ms)
+						</code></pre>
+
+						<blockquote>But there's really cool information in there!</blockquote>
 				</section>
 
 				<section>
-					<section>
-						<h2>Operations Redux</h2>
-						<p>Responsibilities</p>
+						<h2>Better log formats</h2>
+						<pre><code>
+host=8.8.8.8 level=info ip=86.86.86.86 msg=hello world ...
+						</code></pre>
+
+						<div class="fragment">
+							<blockquote>Why not JSON!</blockquote>
+						<pre><code>
+{"host":"8.8.8.8","level":"info","ip":"86.86.86.86","msg":"hello world", ...}
+						</code></pre>
+						</div>
+				</section>
+
+				<section>
+						<h2>Enter Logstash</h2>
+						<blockquote>About logs. But not really about logs</blockquote>
 						<ul>
-							<li>Keep systems up and running
+							<li class="fragment">Written in Ruby/JVM</li>
+							<li class="fragment">Actually just a generic event processor</li>
+							<li class="fragment">With a some logging specific tooling</li>
+							<li class="fragment">OpenSource</li>
+						</ul>
+				</section>
+
+				<section>
+						<h2>Logstash Workflow</h2>
+						<img src="images/logstash-workflow.png" />
+				</section>
+
+				<section>
+						<h2>Config - Inputs</h2>
+						<p>Events go in, somehow</p>
+						<ul>
+							<li>files</li>
+							<li>tcp/ip
 								<ul>
-									<li>Up-to-date</li>
-									<li>Secure</li>
-									<li>Working</li>
+									<li>rsyslog</li>
+									<li>graylog</li>
+									<li>lumberjack</li>
+									<li>stomp</li>
 								</ul>
 							</li>
-							<li>Provision systems
-								<ul>
-									<li>because of growth</li>
-									<li>because of new requirements</li>
-								</ul>
-							</li>
+							<li>Write your own: it's ruby</li>
 						</ul>
-					</section>
-					<section>
-						<h2>Operations</h2>
-						<p>Requirements</p>
+				</section>
+
+				<section>
+						<h2>Config - Filters</h2>
+						<p>Do stuff to your events</p>
 						<ul>
-							<li>Stable/Predictable software</li>
-							<li>Clear/Consistent growth/change plan</li>
+							<li>date: standardise dates</li>
+							<li>grok: big collection of RegExp</li>
+							<li>json: parse JSON</li>
+							<li>geoip: IP to Geo information</li>
+							<li>metrics: event statistics aggregation</li>
+							<li>Write your own: it's ruby</li>
 						</ul>
-					</section>
-					<section>
-						<h2>Operations</h2>
-						<p>Wants</p>
+				</section>
+
+				<section>
+						<h2>Config - Outputs</h2>
+						<p>Put them somewhere</p>
 						<ul>
-							<li>Replace themselves w/ a script</li>
-							<li>Never hear their pagers</li>
+							<li>ElasticSearch</li>
+							<li>Email</li>
+							<li>File</li>
+							<li>Graphite</li>
+							<li>Write your own: it's ruby</li>
 						</ul>
-					</section>
-				</section>
-
-
-				<section>
-					<h2>Conflict!</h2>
-					<ul>
-						<li>Cutting/bleeding edge software is NOT stable/predictable software</li>
-						<li>Rushed releases is NOT a clear change/growth plan</li>
-					</ul>
 				</section>
 
 				<section>
-					<h2>Conflict!</h2>
-					<ul>
-						<li>Dev: "I want {mongodb-2.Xalpha|amazing-non-ACID-compliant-'database'-beta}"</li>
-						<li>Sysadmin: "Nope. It's unstable"</li>
-					</ul>
-					<img src="images/crying.png" style="float: right; width: 300px; height: 300px;">
-				</section>
-
-				<section>
-					<h2>Conflict!</h2>
-					<ul>
-						<li>Sysadmin: "There's a bug in production."</li>
-						<li>Dev: "It works in development. kthxbai."</li>
-					</ul>
-					<img src="images/poker-face.png" style="float: right; width: 300px; height: 300px;">
-				</section>
-
-				<section>
-					<h2>Conflict!</h2>
-					<ul>
-						<li>Dev: "I fixed the problem w/ `chmod -R 777 /`"</li>
-						<li>Sysadmin: "*&$(*&@#(*&#$"</li>
-					</ul>
-					<img src="images/fu.png" style="float: right; width: 300px; height: 300px;">
-				</section>
-
-				<section>
-					<h2>Conflict!</h2>
-					<ul>
-						<li>Dev: "We want to ship this software"</li>
-						<li>Sysadmin: "Ok. Our next change window is in 18 days."</li>
-					</ul>
-					<img src="images/okay.jpg" style="float: right; width: 300px; height: 300px;">
-				</section>
-
-				<section>
-					<h2>Battle of (Two) Roles</h2>
-					<ul>
-						<li>Sysadmin very protective of their turf</li>
-						<li>Developers relinquish accountability</li>
-					</ul>
-					<blockquote style="margin-top: 30px;">It's bad. It's a self-reinforcing cycle and everybody loses.</blockquote>
-				</section>
-
-				<section>
-					<section>
-						<h2>Continuous Delivery</h2>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>An extension of Agile</h2>
-						<p>Cut delivery time (each iteration, or less?)</p>
-						<p>Stability through constant change</p>
-						<p>Increase visibility/feedback</p>
-						<p>We can do that with delivery</p>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>But wait! That fence!</h2>
-						<iframe width="560" height="315" src="http://www.youtube.com/embed/7bFTw95pJp8?t=45s" frameborder="0" allowfullscreen></iframe>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>What is DevOps?</h2>
-						<p>DevOps is NOT a tool.</p>
-						<p>DevOps is NOT someone.</p>
-						<p>DevOps is NOT team.</p>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>Right, but What is DevOps?</h2>
-						<p>Development &amp; Operations</p>
-						<p>It's bridging the gap between development and operations</p>
-						<blockquote class="fragment">DevOps is a way of doing things. <span style="font-weight: bold;">It's an attitude.</span></blockquote>
-					</section>
-				</section>
-
-
-				<section>
-					<section>
-						<h2>Positive Changes</h2>
+						<h2>ElasticSearch</h2>
+						<p>More or less ...</p>
 						<ul>
-							<li>Moore's Law: the cost of virtualisation is minimal</li>
-							<li>Better support for all things distributed</li>
+							<li>Lucene search engine</li>
+							<li>A transaction log</li>
+							<li>Distributed storage and retrieval</li>
+							<li>JSON/HTTP based API</li>
+							<li>Good cloud support</li>
+							<li>OpenSource</li>
 						</ul>
-					</section>
+				</section>
+
+
+
+				<section>
+						<h2>Example configs</h2>
+						<p>nginx access logs</p>
+						<pre><code>
+log_format logstash_json '{ "@timestamp": "$time_iso8601", '
+                         '"clientip": "$remote_addr", '
+                         '"time_spent.total": $request_time, '
+                         '"forwarded_for": "$http_x_forwarded_for", '
+                         '"response.cache_status": "$upstream_cache_status", '
+                         '"response.mime_type": "$sent_http_content_type", '
+                         '"response.status": $status, '
+                         '"response.size": $body_bytes_sent, '
+                         '"request.path": "$request_uri", '
+                         '"request.verb": "$request_method", '
+                         '"request.referrer": "$http_referer", '
+                         '"request.host": "$host", '
+                         '"request.agent": "$http_user_agent" }';</code></pre>
 				</section>
 
 				<section>
-					<section>
-						<h2>Primitives</h2>
+						<h2>Example configs</h2>
+						<p>logstash-forwarder</p>
+						<pre><code>{
+  "network": {
+    "servers": [ "lumberjack-cluster.example.com:443" ],
+    "ssl certificate": "/opt/logstash-forwarder/logstash-server.crt",
+    "ssl key": "/opt/logstash-forwarder/logstash-server.key",
+    "ssl ca": "/opt/logstash-forwarder/logstash-server.crt"
+  },
+  "files": [
+    {
+      "paths": [
+        "/var/log/my-ruby-app/production.log"
+      ],
+      "fields": {
+        "type": "http_access_logs",
+        "source.tier": "unicorn",
+        "source.application": "my-ruby-app",
+        "source.project": "my-project"
+      }
+    },
+
+    {
+      "paths": [
+        "/var/log/nginx/logstash_json.log"
+      ],
+      "fields": {
+        "type": "http_access_logs",
+        "source.tier": "nginx",
+        "source.application": "my-ruby-app",
+        "source.project": "my-project"
+       }
+    }
+  ]
+}</code></pre>
+				</section>
+
+				<section>
+						<h2>Example configs</h2>
+						<p>Logstash</p>
+						<pre><code>
+input {
+	lumberjack {
+		port => 443
+		ssl_certificate => "/opt/logstash/lumberjack.crt"
+		ssl_key => "/opt/logstash/lumberjack.key"
+		codec => "json"
+	}
+}
+
+output {
+	elasticsearch {
+		host => "my-elasticsearch-cluster.example.com"
+		cluster => "my-elasticsearch-cluster-name"
+		protocol => "http"
+	}
+}</code></pre>
+				</section>
+
+
+
+				<section>
+						<h2>Now What?</h2>
+						<p>All your events are in a distributed, easily queryable datastore</p>
+						<pre><code>
+						curl -XPOST http://my-elasticsearchcluster.example.com/_search -d '{"query":{"bool":{"must":[{"term":{"http_access_logs.response.status":"404"}}],"must_not":[],"should":[]}},"from":0,"size":10,"sort":[],"facets":{}}'
+
+{
+	"took": 1357,
+	"timed_out": false,
+	"_shards": {
+		"total": 4,
+		"successful": 4,
+		"failed": 0
+	},
+	"hits": {
+		"total": 184229,
+		"max_score": 1,
+		"hits": [
+			{
+				"_index": "logstash-2015.01.25",
+				"_type": "http_access_logs",
+				"_id": "AUsfjnQ7mXbLjGbOXHyr",
+				"_score": 1,
+				"_source": {
+					"@timestamp": "2015-01-25T05:20:10.182Z",
+					"type": "http_access_logs",
+					"timestamp": "2015-01-25T05:20:10.182641Z",
+					"request": {
+						"scheme": "http",
+						"host": "investor-api.realestate.com.au",
+						"port": 80,
+						"path": "/states/tas/suburbs/goshen.json",
+						"query": null,
+						"fragment": null,
+						"complete": "http://investor-api.realestate.com.au/states/tas/suburbs/goshen.json",
+						"verb": "GET",
+						"http_version":"HTTP/1.1",
+						"size": 0
+					},
+					"response": {
+						"status": 404,
+						"size": 21,
+					},
+
+					"time_spent": {
+						"request_processing": 0.000049,
+						"backend": 0.012,
+						"response_processing": 0.000042,
+						"total": 0.012505
+					},
+					"source": {
+						"lob": "mad",
+						"project": "investor",
+						"application": "investor-api",
+						"stack": "b",
+						"tier": "elb"
+					},
+			}
+		]
+	}
+}
+						</code></pre>
+						<blocquote>Well, kind of easy ...</blockquote>
+				</section>
+
+				<section>
+						<h2>Kibana: Making it easier</h2>
 						<ul>
-							<li>Server vs Instance</li>
-							<li>Harddrive vs Storage</li>
-							<li>Datacenter vs VPC</li>
+							<li>100% Javascript + CSS + HTML application</li>
+							<li>Talks to ElasticSearch directly</li>
+							<li>Beautiful graphs!</li>
+							<li>OpenSource</li>
 						</ul>
-					</section>
 				</section>
 
 				<section>
-					<section>
-						<h2>Awesome!</h2>
+						<h2>Demo time!</h2>
+						<a href="http://kibana.mad-playground-staging.realestate.com.au/">http://kibana.mad-playground-staging.realestate.com.au/</a>
+				</section>
+
+				<section>
+						<h2>Tips and Tricks</h2>
 						<ul>
-							<li>Composable tooling</li>
-							<li>We can program this stuff!</li>
+							<li>Let applications be in control</li>
+							<li>Properly type-cast events</li>
+							<li>Clearly label event sources</li>
+							<li>Re-use event type patterns</li>
+							<li>More run-time info</li>
+							<li>Send IDs uptream</li>
 						</ul>
-					</section>
 				</section>
 
-
-				<section>
-					<section>
-						<h2>Paradigm Shift</h2>
-						Infrastructure barrier of entry MUCH lower
-						<ul>
-							<li>Callable through APIs</li>
-							<li>Mostly requires theoretical knowledge</li>
-							<li>Much less practical experience</li>
-						</ul>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>Paradigm Shift</h2>
-						Traditional Sysadmin offerings have changed
-						<ul>
-							<li>Support these primitives</li>
-							<li>Virtualisation is isolation</li>
-						</ul>
-						<p>We can leverage their work! And we must!</p>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>10 Types of People</h2>
-						<blockquote>There are 10 types of people. Those who can read binary, and those who can't</blockquote>
--- The Internet
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>There's More to it!</h2>
-						<pre>
-[Good] --------------------------(Larry)-----------(Internet Explorer) [Evil]
-[Noodles] -------(ShanXi)-----------------(Larry)---(GuangXi)--------- [Rice]
-[LvRouHuoShao] ---------(Larry)---------------------------------- [RouJiaMou]</pre>
-						<p>And it's all good!</p>
-						<p>Everyone is different</p>
-						<p>No one is better</p>
-						<p>Everyone has something to contribute</p>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>Eliminating Binaries and Barriers</h2>
-						<ul>
-							<li>People fall in their own (comfortable) place</li>
-							<li>Some still at either extreme</li>
-							<li>On average, everyone is closer</li>
-						</ul>
-						<blockquote style="margin-top: 30px;">How do you think this makes us better, as human beings, and as a team?</blockquote>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>In Practice</h2>
-						<p>Everyone is more aware of others</p>
-						<ul>
-							<li>Their preferences</li>
-							<li>What annoys them</li>
-							<li>What they know and don't</li>
-							<li>How they can help us, and we them</li>
-						</ul>
-					</section>
-				</section>
-
-
-				<section>
-					<section>
-						<h2>Bridging the gap / Redefining roles</h2>
-						<pre>[Ops] (Javier)----(Colin)--(Karel)-----(Larry)-------------(WenBo)----- [Dev]</pre>
-						<p>We've all shifted towards each other. That's a good thing!</p>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>Development Heavy People</h2>
-						<ul>
-							<li>Write code, write tests, debug, bala bala</li>
-							<li>Bring software craftsmanship to the 'opsy' people's tools
-								<ul>
-									<li>Testability</li>
-									<li>Code quality &amp; metrics</li>
-									<li>Code reviews &amp; Pair programming</li>
-									<li>An Agile process</li>
-								</ul>
-							</li>
-						</ul>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>Operations Heavy People</h2>
-						<ul>
-							<li>Maintain infrastructure, etc</li>
-							<li>Bring Operations experience and knowledge to devs
-								<ul>
-									<li>Architecture due-dilligence</li>
-									<li>Handling scale &amp; Resiliency</li>
-									<li>General ops experience e.g., a bit of paranoia</li>
-								</ul>
-							</li>
-						</ul>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>Collaboration and Independence</h2>
-						<p>Both sides contribute. No one pulls. Everyone is better off.</p>
-					</section>
-				</section>
-
-				<section>
-					<h2>Enabling teams</h2>
-					<ul>
-						<li>Let teams be flexible: Software and versions</li>
-						<li>Let teams be in control: How and when they deliver software</li>
-					</ul>
-				</section>
-
-				<section>
-					<h2>In true agile fashion</h2>
-					<p>Continuous improvement</p>
-					<ul>
-						<li>Identify pain-points</li>
-						<li>Identify tech-debt</li>
-						<li>Refactor &amp; simplify</li>
-					</ul>
-					<blockquote class="fragment">Simplify even more. Reduce the barrier, to include more people.</blockquote>
-				</section>
-
-				<section>
-					<section>
-						<h2>That "DevOps" role</h2>
-						<p>Ops guys that code / Code guys that ops</p>
-						<p>Useful in (very) large organisations</p>
-						<ul>
-							<li>Follow the 80/20% rule</li>
-							<li>Assigned in development teams</li>
-							<li>Offload work from the real ops guys</li>
-							<li>Hack code vs hack servers</li>
-							<li>Facilitate role transitions</li>
-						</ul>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>We don't do DevOps</h2>
-						<p>Karel, Lauchlin, DanX, Larry don't *do* DevOps</p>
-						<p class="fragment">We make our teams better at it</p>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>Is there anything technical?</h2>
-						<p>All you've talked about is human resources and project management</p>
-					</section>
-				</section>
-
-				<section>
-					<h2>How is it Done? 3 Tenets</h2>
-					<p>Repeatability: Automation</p>
-					<p>Visibility: Logging, monitoring and alerting</p>
-					<p>Flexibility: Adequate response to change</p>
-				</section>
-
-				<section>
-					<section>
-						<h2>Repeatability</h2>
-						<blockquote>Repeatability is the ease with which a process can be re-done.</blockquote>
-						<p>It's important because it assumes a process and it's dependencies has been completely understood and distilled to very simple form. It is executable documentation.</p>
-					</section>
-					<section>
-						<h2>Repeatability</h2>
-<pre>
-$ ftp production-site.com
-> put index.php
-> put lib/something.php
-$ ssh ...</pre>
-Error prone.
-<pre>$ RAILS_ENVIRONMENT=production rake deploy</pre>
-Not error prone. Anyone can run it, and see if it succeeds. Makes few, if any assumptions.
-
-					</section>
-					<section>
-						<h2>Repeatability</h2>
-						<p>Plenty of tools exist</p>
-						<ul>
-							<li>AWS</li>
-							<li>Ansible</li>
-							<li>Puppet</li>
-							<li>Chef</li>
-							<li>SaltStack</li>
-							<li>cfengine</li>
-							<li>Docker</li>
-							<li>Vagrant</li>
-							<li>Git</li>
-							<li>etc ...</li>
-						</ul>
-					</section>
-					<section>
-						<h2>Tools: Does it matter?</h2>
-						<h1>No!</h1>
-					</section>
-					<section>
-						<h2>What it is</h2>
-						<p>Does your tool meet these criteria?</p>
-						<ul>
-							<li>Is simple?</li>
-							<li>Does the same thing every time?</li>
-							<li>Clearly tells you if something went wrong?</li>
-						</ul>
-						<h3>Good</h3>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>Visibility</h2>
-						<blockquote>Visibility is the ease with which one can extract valuable information</blockquote>
-						<p>It is important because we need to know if something goes wrong, and be able to debug it in order to fix it</p>
-					</section>
-					<section>
-						<h2>Visibility</h2>
-						<p>Too much information, can't extract value.</p>
-						<pre>$ cat /dev/random > /dev/console</pre>
-						<p>Too little information, no value.</p>
-						<pre>$ rake deploy 2&> /dev/null</pre>
-						<p>Better. Organised, extractable</p>
-						<pre>Nov 30 17:08:45 cnmlarry NetworkManager[1151]: <info> Activation (wlan0) Stage 4 of 5 (IPv6 Configure Timeout) scheduled...
-Nov 30 17:08:45 cnmlarry NetworkManager[1151]: <info> Activation (wlan0) Stage 4 of 5 (IPv6 Configure Timeout) started...
-Nov 30 17:08:45 cnmlarry NetworkManager[1151]: <info> Activation (wlan0) Stage 4 of 5 (IPv6 Configure Timeout) complete.</pre>
-					</section>
-					<section>
-						<h2>Visibility</h2>
-						<p>Plenty of tools exist</p>
-						<ul>
-							<li>CloudWatch</li>
-							<li>NewRelic</li>
-							<li>Nagios</li>
-							<li>Bamboo</li>
-							<li>Sensu</li>
-							<li>Splunk</li>
-							<li>Loggly</li>
-							<li>Logstash (ELK)</li>
-							<li>etc ...</li>
-						</ul>
-					</section>
-					<section>
-						<h2>Tools: Does it matter?</h2>
-						<h1>No!</h1>
-					</section>
-					<section>
-						<h2>What it is</h2>
-						<p>Is there a (or many) tool to accomplish your task that ...</p>
-						<ul>
-							<li>Is simple?</li>
-							<li>Identifies when something goes wrong?</li>
-							<li>Tells the right people when something goes wrong?</li>
-							<li>Lets you determine what went wrong?</li>
-							<li>Lets you determine why it went wrong?</li>
-						</ul>
-						<h3>Good.</h3>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>Flexibility</h2>
-						<p>The tools you use, are they flexible enough to ...</p>
-						<ul>
-							<li>Fulfill you current business needs?</li>
-							<li>Fulfill imaginable/plausible future business needs?</li>
-						</ul>
-						<h3>Good.</h3>
-					</section>
-				</section>
-
-				<section>
-					<h2>The Bottom Line</h2>
-					<p>It's about making IT delivery</p>
-					<ul>
-						<li>As painless as possible</li>
-						<li>As safe as possible</li>
-						<li>As fast as possible</li>
-					</ul>
-				</section>
-
-				<section>
-					<h2>Questions? Comments? Rotten tomatoes?</h2>
-				</section>
 
 			</div>
 		</div>
