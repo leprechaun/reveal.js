@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>Structured Logging - 2015/01/28 @ ThoughtWorks Xi'An - Laurence J MacGuire</title>
+		<title>Automated Development Environments Workshop - 2015/04/08 @ ThoughtWorks Xi'An - Laurence J MacGuire</title>
 
 		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
 		<meta name="author" content="Hakim El Hattab">
@@ -43,13 +43,13 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section>
-					<h1>Structured Logging</h1>
+					<h1>Automated Developement Environments</h1>
 					<h3>A Working Example</h3>
 					<p>
 						<small>Created by <a href="http://github.com/leprechaun/">Laurence J MacGuire a.k.a Liu Jian Ming aka 刘建明</a></small>
 					</p>
 					<p>
-						<small>Thought<span style="font-weight: bold; color: white;">Works</span> Xi'An, 2014/12/04</small>
+						<small>Thought<span style="font-weight: bold; color: white;">Works</span> Xi'An, 2015/04/08</small>
 					</p>
 
 					<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a>
@@ -68,323 +68,134 @@
 				</section>
 
 				<section>
-						<h2>What are logs?</h2>
+						<h2>Who?</h2>
+						<p>Developers can/should use them</p>
+						<p>Opsy people can help prepare them, share them</p>
+				</section>
+
+				<section>
+						<h2>What?</h2>
+						<p>Automated, Repeatable, Consistent development environments</p>
+				</section>
+
+				<section>
+						<h2>Where?</h2>
+						<p>You PC. Your MAC. You linux box. Maybe even your CI environment!</p>
+				</section>
+
+				<section>
+						<h2>When?</h2>
+						<p>Now, and since 2012, and earlier.</p>
+				</section>
+
+				<section>
+						<h2>Why?</h2>
 						<ul>
-							<li>Debugging</li>
-							<li>Auditing</li>
-							<li>Profiling</li>
+							<li>"It works on my machine"</li>
+							<li>New devs can spend 3 days configuring the environment</li>
+							<li>Polluted computer w/ 6 versions of java, 18 of ruby, 14 gemsets, 3 pythons, etc</li>
 						</ul>
+						<img src="images/laowai-comics-date-jungle.jpg" />
 				</section>
 
 				<section>
-						<h2>Distributed logging</h2>
+						<h2>Why? Continued</h2>
 						<ul>
-							<li>Horizontal vs Vertical scaling</li>
+							<li>Independent environments (no pollution)</li>
+							<li>New devs up and running quickly (repeatability)</li>
+							<li>Everyone runs the same thing, ideally the same as production (consistency)</li>
 						</ul>
-						<pre><code>ssh user@system-01.xyz.com && tail -f /var/log/my-application.log
-ssh user@system-02.xyz.com && tail -f /var/log/my-application.log
-ssh user@system-XX.xyz.com && tail -f /var/log/my-application.log</code></pre>
-						<blockquote>NOPE! NOPE! NOPE!</blockquote>
+						<img src="images/laowai-comics-date-clear-sailing.jpg" />
 				</section>
 
+
 				<section>
-						<h2>Centralised Access</h2>
-						<blockquote>Distribution requires adequate centralisation</blockquote>
+						<h2>How?</h2>
 						<ul>
-							<li>rsyslog</li>
-							<li>graylog</li>
-							<li>lumberjack</li>
-							<li>sftp/s3/whatever</li>
-						</ul>
-				</section>
-
-				<section>
-						<h2>File based logs</h2>
-
-						<pre><code>127.0.0.1 - - [01/Feb/2015:12:41:18 +0800] "GET /optout_check?callback=Krux.ns._default.kxjsonp_optOutCheck HTTP/1.1" 404 506 "http://www.theguardian.com/us-news/2015/jan    /31/detroit-aiyana-stanley-jones-police-officer-cleared" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/39.0.2171.65 Chrome/39.0.    2171.65 Safari/537.36"</code></pre>
-						<pre><code>$&gt; cat access.log | awk '{print $1}' | sort -n | uniq -c | sort -nr
-  29877 93.xxx.xxx.xxx
-  17538 80.xxx.xxx.xxx
-   5895 198.xxx.xxx.xxx
-   3042 37.xxx.xxx.xxx
-   2956 208.xxx.xxx.xxx
-   2613 94.xxx.xxx.xxx
-   ...</code></pre>
-						<blockquote>Cool! But not accessible.</blockquote>
-				</section>
-
-				<section>
-						<h2>It still fails</h2>
-						<h3>Some formats are really hard to parse</h3>
-						<pre><code>
-Started GET "/meta/processed_dates.json" for 127.0.0.1 at 2015-01-25 18:24:49 +0800
-Processing by Meta::ProcessedDatesController#all as JSON
-  Rendered text template (0.0ms)
-Completed 404 Not Found in 8.4ms (Views: 4.9ms | ActiveRecord: 0.5ms)
-						</code></pre>
-
-						<blockquote>But there's really cool information in there!</blockquote>
-				</section>
-
-				<section>
-						<h2>Better log formats</h2>
-						<pre><code>
-host=8.8.8.8 level=info ip=86.86.86.86 msg=hello world ...
-						</code></pre>
-
-						<div class="fragment">
-							<blockquote>Why not JSON!</blockquote>
-						<pre><code>
-{"host":"8.8.8.8","level":"info","ip":"86.86.86.86","msg":"hello world", ...}
-						</code></pre>
-						</div>
-				</section>
-
-				<section>
-						<h2>Enter Logstash</h2>
-						<blockquote>About logs. But not really about logs</blockquote>
-						<ul>
-							<li class="fragment">Written in Ruby/JVM</li>
-							<li class="fragment">Actually just a generic event processor</li>
-							<li class="fragment">With a some logging specific tooling</li>
-							<li class="fragment">OpenSource</li>
-						</ul>
-				</section>
-
-				<section>
-						<h2>Logstash Workflow</h2>
-						<img src="images/logstash-workflow.png" />
-				</section>
-
-				<section>
-						<h2>Config - Inputs</h2>
-						<p>Events go in, somehow</p>
-						<ul>
-							<li>files</li>
-							<li>tcp/ip
+							<li>Virtualisation/Isolation
 								<ul>
-									<li>rsyslog</li>
-									<li>graylog</li>
-									<li>lumberjack</li>
-									<li>stomp</li>
+									<li>VirtualBox</li>
+									<li>VMWare</li>
+									<li>KVM</li>
+									<li>Docker, Docker, Docker!</li>
+									<li>chroot jail, or whatever</li>
 								</ul>
 							</li>
-							<li>Write your own: it's ruby</li>
+							<li>Automation
+								<ul>
+									<li>Vagrant</li>
+									<li>Puppet/Chef/Ansible/Salt/or whatever</li>
+								</ul>
+							</li>
 						</ul>
+						<br/>
+						<span style="font-size: 12px">psst, I don't really care which! But I can help you best w/ Vagrant.</span>
 				</section>
 
 				<section>
-						<h2>Config - Filters</h2>
-						<p>Do stuff to your events</p>
-						<ul>
-							<li>date: standardise dates</li>
-							<li>grok: big collection of RegExp</li>
-							<li>json: parse JSON</li>
-							<li>geoip: IP to Geo information</li>
-							<li>metrics: event statistics aggregation</li>
-							<li>Write your own: it's ruby</li>
-						</ul>
+						<h2>Let's get crackin'</h2>
+						<blockquote>Chose an application you're familiar with</blockquote>
+						<p>Work project, OpenSource project, personal pet-project.</p>
+						<p>Example for workshop: <a href="https://github.com/wldandan/bbs">https://github.com/wldandan/bbs</a></p>
+						<h2>Try packaging your application and running it in the vagrant box ... like in production</h2>
 				</section>
 
 				<section>
-						<h2>Config - Outputs</h2>
-						<p>Put them somewhere</p>
-						<ul>
-							<li>ElasticSearch</li>
-							<li>Email</li>
-							<li>File</li>
-							<li>Graphite</li>
-							<li>Write your own: it's ruby</li>
-						</ul>
+					<h2>Install your tools</h2>
+					<p>VirtualBox: <a href="https://www.virtualbox.org/wiki/Downloads">https://www.virtualbox.org/wiki/Downloads</a></p>
+					<p>Vagrant: <a href="https://www.vagrantup.com/downloads.html">https://www.vagrantup.com/downloads.html</a></p>
+					<p>Something else: <a href="https://www.google.com/">https://www.google.com/</a></p>
 				</section>
 
 				<section>
-						<h2>ElasticSearch</h2>
-						<p>More or less ...</p>
-						<ul>
-							<li>Lucene search engine</li>
-							<li>A transaction log</li>
-							<li>Distributed storage and retrieval</li>
-							<li>JSON/HTTP based API</li>
-							<li>Good cloud support</li>
-							<li>OpenSource</li>
-						</ul>
+					<h2>Runtime dependencies</h2>
+					<ul>
+						<li>Ruby X?</li>
+						<li>JVM Y?</li>
+						<li>MySQL Z</li>
+					</ul>
+					<p>Automatic install &amp; configuration if required.</p>
 				</section>
-
 
 
 				<section>
-						<h2>Example configs</h2>
-						<p>nginx access logs</p>
-						<pre><code>
-log_format logstash_json '{ "@timestamp": "$time_iso8601", '
-                         '"clientip": "$remote_addr", '
-                         '"time_spent.total": $request_time, '
-                         '"forwarded_for": "$http_x_forwarded_for", '
-                         '"response.cache_status": "$upstream_cache_status", '
-                         '"response.mime_type": "$sent_http_content_type", '
-                         '"response.status": $status, '
-                         '"response.size": $body_bytes_sent, '
-                         '"request.path": "$request_uri", '
-                         '"request.verb": "$request_method", '
-                         '"request.referrer": "$http_referer", '
-                         '"request.host": "$host", '
-                         '"request.agent": "$http_user_agent" }';</code></pre>
+					<h2>Bonus points</h2>
+					<p>You get bonus points for being able to re-use what you write here in a CI or deployment pipeline, by the way.</p>
 				</section>
 
 				<section>
-						<h2>Example configs</h2>
-						<p>logstash-forwarder</p>
-						<pre><code>{
-  "network": {
-    "servers": [ "lumberjack-cluster.example.com:443" ],
-    "ssl certificate": "/opt/logstash-forwarder/logstash-server.crt",
-    "ssl key": "/opt/logstash-forwarder/logstash-server.key",
-    "ssl ca": "/opt/logstash-forwarder/logstash-server.crt"
-  },
-  "files": [
-    {
-      "paths": [
-        "/var/log/my-ruby-app/production.log"
-      ],
-      "fields": {
-        "type": "http_access_logs",
-        "source.tier": "unicorn",
-        "source.application": "my-ruby-app",
-        "source.project": "my-project"
-      }
-    },
+					<h2>Vagrantfile</h2>
+					<pre><code>$ vagrant init</code></pre>
+					<pre><code>Vagrant.configure(2) do |config|
+  config.vm.box = "ubuntu/trusty64" # base machine
+  config.vm.network( "forwarded_port",
+	guest: 80, host: 3000
+  )
 
-    {
-      "paths": [
-        "/var/log/nginx/logstash_json.log"
-      ],
-      "fields": {
-        "type": "http_access_logs",
-        "source.tier": "nginx",
-        "source.application": "my-ruby-app",
-        "source.project": "my-project"
-       }
-    }
-  ]
-}</code></pre>
+  config.vm.provision( "shell",
+	path: "build/vagrant-box/install-rvm.sh", privileged: false
+  )
+
+  config.vm.provision( "shell",
+	path: "build/vagrant-box/install-ruby-21.sh", privileged: false
+  )
+
+  config.vm.provision( "shell",
+	inline: "gem install bundler", privileged: false
+  )
+
+  config.vm.provision( "shell",
+	inline: "bundle install", privileged: false
+  )
+end</code></pre>
 				</section>
 
 				<section>
-						<h2>Example configs</h2>
-						<p>Logstash</p>
-						<pre><code>
-input {
-	lumberjack {
-		port => 443
-		ssl_certificate => "/opt/logstash/lumberjack.crt"
-		ssl_key => "/opt/logstash/lumberjack.key"
-		codec => "json"
-	}
-}
-
-output {
-	elasticsearch {
-		host => "my-elasticsearch-cluster.example.com"
-		cluster => "my-elasticsearch-cluster-name"
-		protocol => "http"
-	}
-}</code></pre>
+					<h2>Homework</h2>
+					<h3>Get the BBS application running as it would in production.</h3>
+					<p>Application server, database, running packages a war ...</p>
 				</section>
 
-
-
-				<section>
-						<h2>Now What?</h2>
-						<p>All your events are in a distributed, easily queryable datastore</p>
-						<pre><code>
-						curl -XPOST http://my-elasticsearchcluster.example.com/_search -d '{"query":{"bool":{"must":[{"term":{"http_access_logs.response.status":"404"}}],"must_not":[],"should":[]}},"from":0,"size":10,"sort":[],"facets":{}}'
-
-{
-	"took": 1357,
-	"timed_out": false,
-	"_shards": {
-		"total": 4,
-		"successful": 4,
-		"failed": 0
-	},
-	"hits": {
-		"total": 184229,
-		"max_score": 1,
-		"hits": [
-			{
-				"_index": "logstash-2015.01.25",
-				"_type": "http_access_logs",
-				"_id": "AUsfjnQ7mXbLjGbOXHyr",
-				"_score": 1,
-				"_source": {
-					"@timestamp": "2015-01-25T05:20:10.182Z",
-					"type": "http_access_logs",
-					"timestamp": "2015-01-25T05:20:10.182641Z",
-					"request": {
-						"scheme": "http",
-						"host": "investor-api.realestate.com.au",
-						"port": 80,
-						"path": "/states/tas/suburbs/goshen.json",
-						"query": null,
-						"fragment": null,
-						"complete": "http://investor-api.realestate.com.au/states/tas/suburbs/goshen.json",
-						"verb": "GET",
-						"http_version":"HTTP/1.1",
-						"size": 0
-					},
-					"response": {
-						"status": 404,
-						"size": 21,
-					},
-
-					"time_spent": {
-						"request_processing": 0.000049,
-						"backend": 0.012,
-						"response_processing": 0.000042,
-						"total": 0.012505
-					},
-					"source": {
-						"lob": "mad",
-						"project": "investor",
-						"application": "investor-api",
-						"stack": "b",
-						"tier": "elb"
-					},
-			}
-		]
-	}
-}
-						</code></pre>
-						<blocquote>Well, kind of easy ...</blockquote>
-				</section>
-
-				<section>
-						<h2>Kibana: Making it easier</h2>
-						<ul>
-							<li>100% Javascript + CSS + HTML application</li>
-							<li>Talks to ElasticSearch directly</li>
-							<li>Beautiful graphs!</li>
-							<li>OpenSource</li>
-						</ul>
-				</section>
-
-				<section>
-						<h2>Demo time!</h2>
-						<a href="http://kibana.mad-playground-staging.realestate.com.au/">http://kibana.mad-playground-staging.realestate.com.au/</a>
-				</section>
-
-				<section>
-						<h2>Tips and Tricks</h2>
-						<ul>
-							<li>Let applications be in control</li>
-							<li>Properly type-cast events</li>
-							<li>Clearly label event sources</li>
-							<li>Re-use event type patterns</li>
-							<li>More run-time info</li>
-							<li>Send IDs uptream</li>
-						</ul>
-				</section>
 
 
 			</div>
