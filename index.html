@@ -49,7 +49,7 @@
 						<small>Created by <a href="http://github.com/leprechaun/">Laurence J MacGuire a.k.a Liu Jian Ming aka 刘建明</a></small>
 					</p>
 					<p>
-						<small>Thought<span style="font-weight: bold; color: white;">Works</span> Xi'An, 2014/12/04</small>
+						<small>Thought<span style="font-weight: bold; color: white;">Works</span> Xi'An, 2015/05/20</small>
 					</p>
 
 					<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a>
@@ -89,7 +89,8 @@ ssh user@system-XX.xyz.com && tail -f /var/log/my-application.log</code></pre>
 
 				<section>
 						<h2>Centralised Access</h2>
-						<blockquote>Distribution requires adequate centralisation</blockquote>
+						<blockquote>"Distribute data and processing, but centralise access."</br>
+						-- Me</blockquote>
 						<ul>
 							<li>rsyslog</li>
 							<li>graylog</li>
@@ -146,7 +147,7 @@ host=8.8.8.8 level=info ip=86.86.86.86 msg=hello world ...
 						<ul>
 							<li class="fragment">Written in Ruby/JVM</li>
 							<li class="fragment">Actually just a generic event processor</li>
-							<li class="fragment">With a some logging specific tooling</li>
+							<li class="fragment">With some logging specific tooling</li>
 							<li class="fragment">OpenSource</li>
 						</ul>
 				</section>
@@ -202,10 +203,10 @@ host=8.8.8.8 level=info ip=86.86.86.86 msg=hello world ...
 						<h2>ElasticSearch</h2>
 						<p>More or less ...</p>
 						<ul>
-							<li>Lucene search engine</li>
+							<li>JSON/HTTP based API</li>
 							<li>A transaction log</li>
 							<li>Distributed storage and retrieval</li>
-							<li>JSON/HTTP based API</li>
+							<li>Lucene search engine</li>
 							<li>Good cloud support</li>
 							<li>OpenSource</li>
 						</ul>
@@ -233,6 +234,7 @@ log_format logstash_json '{ "@timestamp": "$time_iso8601", '
 				</section>
 
 				<section>
+					<section>
 						<h2>Example configs</h2>
 						<p>logstash-forwarder</p>
 						<pre><code>{
@@ -268,6 +270,13 @@ log_format logstash_json '{ "@timestamp": "$time_iso8601", '
     }
   ]
 }</code></pre>
+					</section>
+					
+					<section>
+						<h2>Example configs</h2>
+						<p>syslog</p>
+						<pre><code>*.* action(type="omtcp" target="w.x.y.z" port="514")</code></pre>
+					</section>
 				</section>
 
 				<section>
@@ -354,8 +363,7 @@ output {
 			}
 		]
 	}
-}
-						</code></pre>
+}</code></pre>
 						<blocquote>Well, kind of easy ...</blockquote>
 				</section>
 
@@ -371,21 +379,229 @@ output {
 
 				<section>
 						<h2>Demo time!</h2>
-						<a href="http://kibana.mad-playground-staging.realestate.com.au/">http://kibana.mad-playground-staging.realestate.com.au/</a>
+						<a href="https://mad-logs.realestate.com.au/">https://mad-logs.realestate.com.au/</a>
 				</section>
 
 				<section>
-						<h2>Tips and Tricks</h2>
+						<h2>What should you log?</h2>
+						<img src="images/leon-everyone.gif" />
+						<blockquote>"<span style="text-decoration: line-through;">Everyone</span>Everything!"</blockquote>
+				</section>
+
+				<section>
+						<h2>Seriously!</h2>
+						<p>System logs</p>
 						<ul>
-							<li>Let applications be in control</li>
-							<li>Properly type-cast events</li>
-							<li>Clearly label event sources</li>
-							<li>Re-use event type patterns</li>
-							<li>More run-time info</li>
-							<li>Send IDs uptream</li>
+							<li>kernel boot logs</li>
+							<li>security log</li>
+							<li>linux subsystem logs</li>
 						</ul>
 				</section>
 
+				<section>
+						<h2>More!</h2>
+						<p>Application logs</p>
+						<ul>
+							<li>Backend App logs</li>
+							<li>Especially App startup</li>
+							<li>Also: TIMING INFORMATION!</li>
+						</ul>
+						<blockquote>"If your logs don't give you a *really really* good clue what happened. They're useless"</br/> -- Me</blockquote>
+				</section>
+
+				<section>
+						<h2>MOAR!</h2>
+						<p>Application *business* logs</p>
+						Try logging all business/domain relavant events.
+						<ul>
+							<li>Users: create, login, forget password</li>
+							<li>Posts: create, reply, delete</li>
+							<li>Capture metrics!</li>
+						</ul>
+				</section>
+
+				<section>
+					<h2>MOOOOOOOAAARRRRR!!!</h2>
+					<ul>
+						<li>Access logs
+							<ul>
+								<li>Unicorn/whatever (app)</li>
+								<li>Nginx/Apache (proxy)</li>
+								<li>ELB/HAProxy (load-balancer)</li>
+								<li>Cloudfront/CDN?</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Also (really) important</h2>
+					<ul>
+						<li>Application auto-scaling event</li>
+						<li>Instance/application boot up</li>
+						<li>Deployment events (deploy, switch, revert, etc)</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>I might actually be insane</h2>
+					<ul>
+						<li>Browser-side application logs?</li>
+						<li>Browser-side user-interaction logs?</li>
+						<li>I've done it for fun. Why not!?</li>
+					</ul>
+				</section>
+
+
+				<section>
+					<h2>Shifting mindsets</h2>
+					<blockquote>"Logs aren't files full of stacktraces you never read. They're an event stream that should be treated and processed like a first-class citizen."</br>-- Me</blockquote>
+				</section>
+
+				<section>
+					<h2>Tip: Apps are in control</h2>
+					Developers are aware of the business context. Let them log appropriately.
+				</section>
+
+				<section>
+					<h2>Tip: Type-cast events</h2>
+					<pre><code>{"user":{"id":"124"}}</code></pre>
+					Nope! We're shoving this in a database. Treat it with respect.
+				</section>
+
+				<section>
+					<h2>Tip: Clearly label event sources</h2>
+					<pre><code>{
+	"source":{
+		"lob":"MAD",
+		"project":"investor",
+		"application":"investor-api",
+		"tier":"nginx",
+		"host": "W.X.Y.Z",
+		"etc": "sdfsf"
+	}
+}</code></pre>
+				</section>
+
+				<section>
+					<h2>Tip: Re-use event type information</h2>
+					Unicorn, Nginx/Apache, ELB ... they all log
+					<pre><code>request: {
+	"verb": "GET",
+	"path": "/somewhere/file.html",
+	"http_version": "1.1",
+	"host": "virtual-host.domain.com",
+	"referer": "http://www.some-other-domain/page.html",
+	"user-agent": "Mozilla Compatible (blah blah)"
+},
+response: {
+	"status": 200,
+	"size": 123123,
+	"etc": "asdasda"
+}</code></pre>
+					These app mostly log (more or less) the same information. Categorise accordingly.
+				</section>
+
+				<section>
+					<section>
+						<h2>Tip: Include run-time information</h2>
+						<p>Which user made this post?</p>
+						<pre><code>{
+	"board.id":123
+	"board.name":"Self-help",
+	"sender.id":3462,
+	"sender.username": "lmac",
+	"post.subjet": "Lol, wut?"
+}</code></pre>
+
+					</section>
+					<section>
+						<h2>Tip: Include run-time information</h2>
+						<p>To and from which address was this email sent?</p>
+						<pre><code>{
+	"from.address":"bob@example.com",
+	"to.address":"alice@example.com",
+	"sender.username":"bob_awesome_saas",
+	"message.id": "eeaa4f14-c720-4c9f-b2f8-b5b859e49e46",
+	"message.subjet": "password reminder",
+	"message.status": "relayed"
+}</code></pre>
+					</section>
+					<section>
+						<h2>Tip: Include run-time information</h2>
+						<p>Which build number is running?</p>
+							<pre><code>{
+		"source.project":"my-awesome-saas-thing",
+		"source.app":"thingamabobinator",
+		"source.build_number":"master-666-ed3dab32"
+	}</code></pre>
+					</section>
+
+					<section>
+						<h2>Tip: Include run-time information</h2>
+						<p>Which build number is running?</p>
+							<pre><code>{
+	"source.project":"my-awesome-saas-thing",
+	"source.app":"thingamabobinator",
+	"source.build_number":"master-666-ed3dab32"
+}</code></pre>
+					</section>
+
+					<section>
+						<h2>Tip: Include run-time information</h2>
+						<p>Why was this decision taken</p>
+							<pre><code>{
+	"entity": "email",
+	"status": "marked-spam",
+	"reason": "source ip not authorized by SPF record"
+}</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<h2>Tip: Send IDs upstream</h2>
+					Does you load-balancer/proxy set request-ids? Log them! <br/>You can possibly trace an action throughout the whole stack!!!
+					<pre><code>Cloudfront: X-Request-Id: eeaa4f14-c720-4c9f-b2f8-b5b859e49e46
+Load Balancer: X-Request-Id: eeaa4f14-c720-4c9f-b2f8-b5b859e49e46
+Local Proxy: X-Request-Id: eeaa4f14-c720-4c9f-b2f8-b5b859e49e46
+Unicorn: X-Request-Id: eeaa4f14-c720-4c9f-b2f8-b5b859e49e46
+Database: X-Request-Id: eeaa4f14-c720-4c9f-b2f8-b5b859e49e46</code></pre>
+					<pre><code>CloudFront -> ELB -> NGinx -> Unicorn -> ActiveRecord = 345ms</code></pre>
+				</section>
+
+				<section>
+					<h2>Denormalise</h2>
+					<p>You'll need to denormalise your data, a lot.</p>
+					<p>Most <b>event</b> oriented data-stores are <b>NOT</b> relational.</p>
+					<p>Storage is cheap.</p>
+				</section>
+
+
+				<section>
+					<h2>Homework</h2>
+					<p>Pipe you app logs somewhere and get useful data.</p>
+					<p>As usual, I don't care how you do it</p>
+				</section>
+
+				<section>
+					<h2>Your app</h2>
+					<h3>Collection</h3>
+					<p>rsyslog, flat-files, direct on the wire<p>
+					<h3>Forwarding</h3>
+					<p>logstash-forwarder, syslog, greylog, lumberjack, kinesis, s3</p>
+				</section>
+				<section>
+					<h2>Logging backends</h2>
+					<h3>Processing</h3>
+					<p>logstash, fluentd, rsyslog, scripts, Splunk</p>
+					<h3>Storage</h3>
+					<p>elasticsearch, influxdb, opentsdb, mongodb, mysql</p>
+				</section>
+
+				<section>
+					<h1>The point:</h1>
+					<h2>Get useful data</h2>
+				</section>
 
 			</div>
 		</div>
@@ -394,7 +610,6 @@ output {
 		<script src="js/reveal.min.js"></script>
 
 		<script>
-
 			// Full list of configuration options available here:
 			// https://github.com/hakimel/reveal.js#configuration
 			Reveal.initialize({
@@ -418,8 +633,6 @@ output {
 					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
 				]
 			});
-
 		</script>
-
 	</body>
 </html>
