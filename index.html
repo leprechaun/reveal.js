@@ -332,12 +332,12 @@ output {
 					"timestamp": "2015-01-25T05:20:10.182641Z",
 					"request": {
 						"scheme": "http",
-						"host": "investor-api.realestate.com.au",
+						"host": "some-home.domain.com",
 						"port": 80,
-						"path": "/states/tas/suburbs/goshen.json",
+						"path": "/request/blah/sdfsdf",
 						"query": null,
 						"fragment": null,
-						"complete": "http://investor-api.realestate.com.au/states/tas/suburbs/goshen.json",
+						"complete": "http://some-home.domain.com/request/blah/sdfsdf",
 						"verb": "GET",
 						"http_version":"HTTP/1.1",
 						"size": 0
@@ -355,8 +355,8 @@ output {
 					},
 					"source": {
 						"lob": "mad",
-						"project": "investor",
-						"application": "investor-api",
+						"project": "my-project",
+						"application": "my-application",
 						"stack": "b",
 						"tier": "elb"
 					},
@@ -379,13 +379,14 @@ output {
 
 				<section>
 						<h2>Demo time!</h2>
-						<a href="https://mad-logs.realestate.com.au/">https://mad-logs.realestate.com.au/</a>
+						<a href="https://url-redacted/">https://url-redacted/</a>
 				</section>
 
 				<section>
 						<h2>What should you log?</h2>
 						<img src="images/leon-everyone.gif" />
 						<blockquote>"<span style="text-decoration: line-through;">Everyone</span>Everything!"</blockquote>
+						<p style="font-size: 12px">* Adding an asterisk, just because</p>
 				</section>
 
 				<section>
@@ -474,8 +475,8 @@ output {
 					<pre><code>{
 	"source":{
 		"lob":"MAD",
-		"project":"investor",
-		"application":"investor-api",
+		"project":"my-project",
+		"application":"my-application",
 		"tier":"nginx",
 		"host": "W.X.Y.Z",
 		"etc": "sdfsf"
@@ -499,7 +500,7 @@ response: {
 	"size": 123123,
 	"etc": "asdasda"
 }</code></pre>
-					These app mostly log (more or less) the same information. Categorise accordingly.
+					These apps log (more or less) the same information.</br> Categorise accordingly.
 				</section>
 
 				<section>
@@ -507,7 +508,7 @@ response: {
 						<h2>Tip: Include run-time information</h2>
 						<p>Which user made this post?</p>
 						<pre><code>{
-	"board.id":123
+	"board.id":123,
 	"board.name":"Self-help",
 	"sender.id":3462,
 	"sender.username": "lmac",
@@ -556,17 +557,37 @@ response: {
 	"reason": "source ip not authorized by SPF record"
 }</code></pre>
 					</section>
-				</section>
 
-				<section>
-					<h2>Tip: Send IDs upstream</h2>
-					Does you load-balancer/proxy set request-ids? Log them! <br/>You can possibly trace an action throughout the whole stack!!!
-					<pre><code>Cloudfront: X-Request-Id: eeaa4f14-c720-4c9f-b2f8-b5b859e49e46
+					<section>
+						<h2>Tip: Send IDs upstream</h2>
+						Does you load-balancer/proxy set request-ids? Log them! <br/>You can possibly trace an action throughout the whole stack!!!
+						<pre><code>Cloudfront: X-Request-Id: eeaa4f14-c720-4c9f-b2f8-b5b859e49e46
 Load Balancer: X-Request-Id: eeaa4f14-c720-4c9f-b2f8-b5b859e49e46
 Local Proxy: X-Request-Id: eeaa4f14-c720-4c9f-b2f8-b5b859e49e46
 Unicorn: X-Request-Id: eeaa4f14-c720-4c9f-b2f8-b5b859e49e46
 Database: X-Request-Id: eeaa4f14-c720-4c9f-b2f8-b5b859e49e46</code></pre>
-					<pre><code>CloudFront -> ELB -> NGinx -> Unicorn -> ActiveRecord = 345ms</code></pre>
+						<pre><code>CloudFront -> ELB -> NGinx -> Unicorn -> ActiveRecord = 345ms</code></pre>
+					</section>
+
+
+
+				</section>
+
+				<section>
+					<h2>Tip: Watch out for security!</h2>
+					<pre><code>
+logger.debug(personal_information.to_json)
+{
+	"name": {"first":"JianMing","last":"Liu"},
+	"birth": {"date":"8888/88/88", "location":"Somewhere"},
+	"job": {"company":"ThoughtWorks", "salary":"888888888888888888888888888888"},
+	"email": "ljm@thoughtworks.com",
+	"address": {"city":"XiAn","state":"ShanXi","road":"JinYeYiLu","number":34},
+	"credit_card": {"number":"88888888", "exp":"2020/12/12", "cvv":"123"},
+	"security_questions": { "mothers_name": "Mary", "first_pet": "dog" }
+}</code></pre>
+					<h2>Please. No.</h2>
+					<p style="font-size: 12px;">If this kind of information gets leaked, we're in for a world of pain.</p>
 				</section>
 
 				<section>
@@ -586,7 +607,7 @@ Database: X-Request-Id: eeaa4f14-c720-4c9f-b2f8-b5b859e49e46</code></pre>
 				<section>
 					<h2>Your app</h2>
 					<h3>Collection</h3>
-					<p>rsyslog, flat-files, direct on the wire<p>
+					<p>rsyslog, flat-files, direct on the wire</p>
 					<h3>Forwarding</h3>
 					<p>logstash-forwarder, syslog, greylog, lumberjack, kinesis, s3</p>
 				</section>
@@ -601,6 +622,31 @@ Database: X-Request-Id: eeaa4f14-c720-4c9f-b2f8-b5b859e49e46</code></pre>
 				<section>
 					<h1>The point:</h1>
 					<h2>Get useful data</h2>
+				</section>
+
+				<section>
+					<h2>Ideas</h2>
+					<ul>
+						<li>Collect: syslog</li>
+						<li>Transport: syslog or logstash-forwarder</li>
+						<li>Ingest: logstash</li>
+						<li>Store: ElasticSearch</li>
+						<li>Query: Kibana 3</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>How we're doing in MaD</h2>
+					<ul>
+						<li>Collection: rsyslog</li>
+						<li>Transport: Amazon Kinesis</li>
+						<li>Ingestion: Logstash</li>
+						<li>Storage: Elasticsearch</li>
+						<li>Query: Kibana 3</li>
+						<br/>
+						<li>Getting *all* system logs</li>
+						<li>Slowly moving applications in parallel</li>
+					</ul>
 				</section>
 
 			</div>
