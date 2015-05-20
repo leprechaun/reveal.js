@@ -540,16 +540,6 @@ response: {
 
 					<section>
 						<h2>Tip: Include run-time information</h2>
-						<p>Which build number is running?</p>
-							<pre><code>{
-	"source.project":"my-awesome-saas-thing",
-	"source.app":"thingamabobinator",
-	"source.build_number":"master-666-ed3dab32"
-}</code></pre>
-					</section>
-
-					<section>
-						<h2>Tip: Include run-time information</h2>
 						<p>Why was this decision taken</p>
 							<pre><code>{
 	"entity": "email",
@@ -568,9 +558,11 @@ Unicorn: X-Request-Id: eeaa4f14-c720-4c9f-b2f8-b5b859e49e46
 Database: X-Request-Id: eeaa4f14-c720-4c9f-b2f8-b5b859e49e46</code></pre>
 						<pre><code>CloudFront -> ELB -> NGinx -> Unicorn -> ActiveRecord = 345ms</code></pre>
 					</section>
+				</section>
 
-
-
+				<section>
+					<h2>Tip: Human readability</h2>
+					<p>Even if you are doing structured logging, *always* include a 'message' field with a humand readable version.</p>
 				</section>
 
 				<section>
